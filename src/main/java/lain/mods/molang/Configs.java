@@ -16,7 +16,7 @@ public class Configs
     public static boolean dumpExtraOnly = true;
     public static boolean OnlineEnabled = true;
     public static boolean OnlineSkipVerification = true;
-    public static String[] OnlineProviders = { "http://tab.mcbbc.com/lang/%s" };
+    public static String[] OnlineProviders = { "http://tab.mcmod.cn/lang/%s" };
 
     private static String[] decode(String[] array)
     {

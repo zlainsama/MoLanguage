@@ -1,10 +1,9 @@
-package lain.mods.molang.old;
+package lain.mods.molang;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
-import lain.mods.molang.io.UnicodeInputStreamReader;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.common.io.CharStreams;

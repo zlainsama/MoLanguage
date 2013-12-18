@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Proxy;
-import java.net.URL;
-import lain.mods.molang.io.UnicodeInputStreamReader;
+import net.minecraftforge.common.Configuration.UnicodeInputStreamReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.CharStreams;
@@ -16,37 +14,6 @@ import cpw.mods.fml.common.Loader;
 
 public class RemoteTranslationFileLoader
 {
-
-    private static File download(Fetchable f, int maxAttempts)
-    {
-        while (f.getNumAttempts() < maxAttempts)
-        {
-            try
-            {
-                System.out.println(String.format("fetching%s \'%s\' to \'%s\'", f.getNumAttempts() > 0 ? String.format(" (attempt %d)", f.getNumAttempts() + 1) : "", f.getRemoteFile(), f.getLocalFile()));
-                System.out.println(f.fetch());
-                return f.getLocalFile();
-            }
-            catch (Throwable t)
-            {
-                System.err.println(t.toString());
-            }
-        }
-        return null;
-    }
-
-    private static String filterFilename(String filename)
-    {
-        if (filename == null)
-            return null;
-        StringBuilder s = new StringBuilder(filename.length());
-        for (char c : filename.toCharArray())
-            if (Character.isLetterOrDigit(c) || '-' == c || '_' == c || '.' == c)
-                s.append(c);
-            else
-                s.append('_');
-        return s.toString();
-    }
 
     public static TranslationTable load(File baseDir) throws IOException
     {
@@ -62,8 +29,7 @@ public class RemoteTranslationFileLoader
 
     private static void load0(TranslationTable t, String baseURL, File tempDir) throws IOException
     {
-        String s = String.format(baseURL, "langlist.list");
-        File fileList = download(new Fetchable(Proxy.NO_PROXY, new URL(s), new File(tempDir, filterFilename(s)), false), 5);
+        File fileList = SimpleCachedRemoteFile.download(tempDir, String.format(baseURL, "langlist.list"));
         if (fileList != null)
         {
             FileInputStream data = null;
@@ -116,8 +82,7 @@ public class RemoteTranslationFileLoader
                 continue;
             for (String n : files.get(modname))
             {
-                String s = String.format(baseURL, n);
-                File langFile = download(new Fetchable(Proxy.NO_PROXY, new URL(s), new File(tempDir, filterFilename(s)), true), 3);
+                File langFile = SimpleCachedRemoteFile.download(tempDir, String.format(baseURL, n));
                 if (langFile != null)
                 {
                     InputStream data = null;
