@@ -3,14 +3,15 @@ package lain.mods.molang;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.Language;
 import net.minecraft.client.resources.LanguageManager;
-import net.minecraft.client.resources.Resource;
-import net.minecraft.client.resources.ResourceManager;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
+@SuppressWarnings("unchecked")
 public class ModCompatibilities
 {
 
@@ -38,13 +39,13 @@ public class ModCompatibilities
 
     public static void loadActualGameTable(TranslationTable t, String lang)
     {
-        ResourceManager resources = FMLClientHandler.instance().getClient().getResourceManager();
+        IResourceManager resources = FMLClientHandler.instance().getClient().getResourceManager();
         String n = String.format("lang/%s.lang", lang);
         for (String respack : (Set<String>) resources.getResourceDomains())
         {
             try
             {
-                for (Resource resource : (List<Resource>) resources.getAllResources(new ResourceLocation(respack, n)))
+                for (IResource resource : (List<IResource>) resources.getAllResources(new ResourceLocation(respack, n)))
                     t.importTranslationFile(resource.getInputStream(), lang);
             }
             catch (IOException ignored)
@@ -63,11 +64,11 @@ public class ModCompatibilities
 
     public static void loadVanillaTable(TranslationTable t, String lang)
     {
-        ResourceManager resources = FMLClientHandler.instance().getClient().getResourceManager();
+        IResourceManager resources = FMLClientHandler.instance().getClient().getResourceManager();
         String n = String.format("lang/%s.lang", lang);
         try
         {
-            for (Resource resource : (List<Resource>) resources.getAllResources(new ResourceLocation("minecraft", n)))
+            for (IResource resource : (List<IResource>) resources.getAllResources(new ResourceLocation("minecraft", n)))
                 t.importTranslationFile(resource.getInputStream(), lang);
         }
         catch (IOException ignored)

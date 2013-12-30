@@ -142,7 +142,7 @@ public class SimpleCachedRemoteFile
     {
         if (filename == null)
             return null;
-        return Hashing.sha1().hashString(filename).toString();
+        return Hashing.sha1().hashUnencodedChars(filename).toString();
     }
 
 }
